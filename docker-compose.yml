@@ -1,18 +1,6 @@
 services:
-  server:
-    build:
-      dockerfile: Dockerfile
-      context: .
-    depends_on:
-      - mysql
-    volumes:
-      - .:/usr/src/app
-    env_file:
-      - .env
-    ports:
-      - 3000:3000
-
-  mysql:
+  db:
+    container_name: ${MYSQL_HOST}
     image: mysql
     restart: always
     environment:
@@ -20,10 +8,33 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      TZ: Asia/Seoul
     ports:
       - '3306:3306'
     volumes:
-      - docker-nest-mysql:/var/lib/mysql
+      - mysql:/var/lib/mysql
+    networks:
+      - app-net
+
+  server:
+    container_name: server_container
+    build:
+      dockerfile: Dockerfile
+      context: .
+    depends_on:
+      - db
+    volumes:
+      - .:/usr/src/app
+    env_file:
+      - .env
+    ports:
+      - 3000:3000
+      - 9000:9000
+    networks:
+      - app-net
 
 volumes:
-  docker-nest-mysql:
+  mysql:
+
+networks:
+  app-net:
