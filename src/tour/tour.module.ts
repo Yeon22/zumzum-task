@@ -8,6 +8,7 @@ import { SellerModule } from 'src/seller/seller.module';
 @Module({
   imports: [TypeOrmModule.forFeature([Tour]), SellerModule],
   controllers: [TourController],
-  providers: [TourService]
+  providers: [TourService],
+  exports: [TourService],
 })
 export class TourModule {}

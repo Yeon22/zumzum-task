@@ -2,7 +2,7 @@ import { Injectable, Inject, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Tour } from './entity/tour.entity';
 import { Repository } from 'typeorm';
-import { CreateTourDto } from './dto/tour.dto';
+import { CreateTourDto, UpdateTourHolidayDto } from './dto/tour.dto';
 import { SellerService } from 'src/seller/seller.service';
 
 @Injectable()
@@ -27,6 +27,23 @@ export class TourService {
         tour.location = createTourDto.location;
         tour.seller = seller;
 
+        return this.tourRepository.save(tour);
+    }
+
+    findById(id: number): Promise<Tour> {
+        return this.tourRepository.findOne({ where: {id} });
+    }
+
+    async updateHoliday(id: number, updateTourHolidayDto: UpdateTourHolidayDto): Promise<Tour> {
+        const tour = await this.findById(id);
+        if (!tour) {
+            throw new BadRequestException('존재하지 않는 투어 상품입니다.');
+        }
+
+        tour.holidayDate = updateTourHolidayDto.holidayDate;
+        tour.holidayDay = updateTourHolidayDto.holidayDay;
+        tour.holidayIsRepeat = updateTourHolidayDto.holidayIsRepeat;
+        
         return this.tourRepository.save(tour);
     }
 }

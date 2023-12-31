@@ -1,12 +1,12 @@
 import { Seller } from "src/seller/entity/seller.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-enum STATE {
+export enum STATE {
     NON_USE = 0,
     USE = 1,
 }
 
-enum DAY {
+export enum DAY {
     SUN = 0,
     MON = 1,
     TUE = 2,
