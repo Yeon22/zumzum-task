@@ -1,9 +1,13 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Tour } from "src/tour/entity/tour.entity";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Seller {
     @PrimaryGeneratedColumn()
     id: number;
+
+    @OneToMany(() => Tour, (tour) => tour.seller)
+    tours: Tour[];
 
     @Column({ length: 50 })
     name: string;

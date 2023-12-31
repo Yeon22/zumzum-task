@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CustomerModule } from './customer/customer.module';
 import { SellerModule } from './seller/seller.module';
+import { TourModule } from './tour/tour.module';
 
 @Module({
   imports: [
@@ -14,13 +15,12 @@ import { SellerModule } from './seller/seller.module';
         username: process.env.MYSQL_USER,
         password: process.env.MYSQL_PASSWORD,
         database: process.env.MYSQL_DB,
-        entities: [
-            __dirname + '/**/*.entity{.ts,.js}'
-        ],
+        entities: ['dist/**/*.entity{.ts,.js}'],
         synchronize: true,
     }),
     CustomerModule,
-    SellerModule
+    SellerModule,
+    TourModule
   ],
   controllers: [AppController],
   providers: [AppService],

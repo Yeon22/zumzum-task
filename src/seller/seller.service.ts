@@ -19,4 +19,8 @@ export class SellerService {
 
         return this.sellerRepository.save(seller);
     }
+
+    findById(id: number): Promise<Seller> {
+        return this.sellerRepository.findOne({where: {id}})
+    }
 }
