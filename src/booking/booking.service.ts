@@ -21,6 +21,7 @@ export class BookingService {
         booking.seller = tour.seller;
         booking.state = createBookingDto.state;
         booking.tourStartAt = createBookingDto.tourStartAt;
+        booking.tourEndAt = new Date(createBookingDto.tourStartAt.getTime() + tour.tour_period * 24 * 60 * 60 * 1000);
 
         return this.bookingRepository.save(booking);
     }

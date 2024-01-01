@@ -36,6 +36,9 @@ export class Booking {
     @Column({ name: 'tour_start_at', nullable: true })
     tourStartAt: Date;
 
+    @Column({ name: 'tour_end_at', nullable: true })
+    tourEndAt: Date;
+
     @Column({ name: 'approved_at', nullable: true })
     approvedAt: Date
 
