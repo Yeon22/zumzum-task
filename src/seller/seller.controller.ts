@@ -52,6 +52,16 @@ export class SellerController {
         return this.bookingService.findsBySellerId(id);
     }
 
+    @Get(':id/booking/:token')
+    async findCustomerBooking(@Param('id') id: number, @Param('token') token: string): Promise<Booking> {
+        const seller = await this.sellerService.findById(id);
+        if (!seller) {
+            throw new BadRequestException('판매자 정보를 찾을 수 없습니다.');
+        }
+
+        return this.bookingService.findByToken(token);
+    }
+
     @Patch(':id/booking/:bookingId/approve')
     async approveBooking(@Param('id') id: number, @Param('bookingId') bookingId: number): Promise<Booking> {
         const seller = await this.sellerService.findById(id);

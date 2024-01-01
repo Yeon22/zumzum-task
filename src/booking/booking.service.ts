@@ -30,6 +30,17 @@ export class BookingService {
         return this.bookingRepository.findOne({ where: {id} });
     }
 
+    findByToken(token: string): Promise<Booking> {
+        return this.bookingRepository.findOne({
+            where: {
+                token
+            },
+            relations: {
+                customer: true
+            }
+        });
+    }
+
     findsBySellerId(sellerId: number): Promise<Booking[]> {
         return this.bookingRepository.find({
             where: {
