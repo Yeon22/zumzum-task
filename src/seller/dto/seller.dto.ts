@@ -1,5 +1,5 @@
-import { IsMobilePhone, IsString, IsInt, MinDate, IsDate, IsOptional } from "@nestjs/class-validator";
-import { DAY, STATE } from "src/tour/entity/tour.entity";
+import { IsMobilePhone, IsString, IsInt, MinDate, IsDate, IsOptional, IsEnum } from "@nestjs/class-validator";
+import { DAY, TOUR_STATE } from "src/tour/entity/tour.entity";
 
 export class CreateSellerDto {
     @IsString()
@@ -36,6 +36,6 @@ export class UpdateSellerTourDto {
     @IsOptional()
     holidayDay: DAY;
 
-    @IsInt()
-    holidayIsRepeat: STATE;
+    @IsEnum(TOUR_STATE)
+    holidayIsRepeat: TOUR_STATE;
 }

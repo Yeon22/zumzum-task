@@ -1,5 +1,5 @@
 import {IsEnum, IsMobilePhone, IsString} from '@nestjs/class-validator';
-import { STATE } from 'src/booking/entity/booking.entity';
+import { BOOKING_STATE } from 'src/booking/entity/booking.entity';
 
 export class CreateCustomerDto {
     @IsString()
@@ -10,6 +10,6 @@ export class CreateCustomerDto {
 }
 
 export class CreateCustomerBookingDto {
-    @IsEnum(STATE)
-    state: STATE;
+    @IsEnum(BOOKING_STATE)
+    state: BOOKING_STATE;
 }

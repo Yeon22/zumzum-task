@@ -3,7 +3,7 @@ import { Seller } from "src/seller/entity/seller.entity";
 import { Tour } from "src/tour/entity/tour.entity";
 import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-export enum STATE {
+export enum BOOKING_STATE {
     WAIT = 0,
     APPROVE = 1,
     CANCEL = 2,
@@ -30,8 +30,11 @@ export class Booking {
     @Index({ unique: true })
     token: string;
 
-    @Column({ default: STATE.WAIT })
-    state: STATE;
+    @Column({ default: BOOKING_STATE.WAIT })
+    state: BOOKING_STATE;
+
+    @Column({ name: 'approved_at', nullable: true })
+    approvedAt: Date
 
     @Column({ name: 'created_at' })
     @CreateDateColumn()
