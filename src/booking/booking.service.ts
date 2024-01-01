@@ -43,6 +43,19 @@ export class BookingService {
         });
     }
 
+    findsByCustomerId(customerId: number): Promise<Booking[]> {
+        return this.bookingRepository.find({
+            where: {
+                customer: {
+                    id: customerId
+                }
+            },
+            relations: {
+                tour: true
+            }
+        });
+    }
+
     approveBooking(approveBookingDto: ApproveBookingDto): Promise<Booking> {
         const {booking} = approveBookingDto;
         booking.state = BOOKING_STATE.APPROVE;

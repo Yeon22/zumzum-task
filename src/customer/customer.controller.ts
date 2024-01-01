@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, Post, Param, BadRequestException } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post, Param, BadRequestException, Get } from '@nestjs/common';
 import { CreateCustomerBookingDto, CreateCustomerDto } from './dto/customer.dto';
 import { Customer } from './entity/customer.entity';
 import { Booking } from 'src/booking/entity/booking.entity';
@@ -34,5 +34,15 @@ export class CustomerController {
         }
 
         return this.bookingService.create({...createCustomerBookingDto, customer, tour});
+    }
+
+    @Get(':id/booking')
+    async findBookings(@Param('id') id: number): Promise<Booking[]> {
+        const customer = await this.customerService.findById(id);
+        if (!customer) {
+            throw new BadRequestException('사용자 정보를 찾을 수 없습니다.');
+        }
+
+        return this.bookingService.findsByCustomerId(id);
     }
 }
