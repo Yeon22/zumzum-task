@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BOOKING_STATE, Booking } from './entity/booking.entity';
-import { ApproveBookingDto, CreateBookingDto } from './dto/booking.dto';
+import { ApproveBookingDto, CancelBookingDto, CreateBookingDto } from './dto/booking.dto';
 import { randomUUID } from 'crypto';
 
 @Injectable()
@@ -67,11 +67,23 @@ export class BookingService {
         });
     }
 
-    approveBooking(approveBookingDto: ApproveBookingDto): Promise<Booking> {
+    approve(approveBookingDto: ApproveBookingDto): Promise<Booking> {
         const {booking} = approveBookingDto;
         booking.state = BOOKING_STATE.APPROVE;
         booking.token = randomUUID();
         booking.approvedAt = new Date();
+
+        return this.bookingRepository.save(booking);
+    }
+
+    cancel(cancelBookingDto: CancelBookingDto): Promise<Booking> {
+        const {booking, customer} = cancelBookingDto;
+
+        if (booking.customer.id !== customer.id) {
+            throw new Error('예약정보와 고객정보가 일치하지 않습니다.');
+        }
+
+        booking.state = BOOKING_STATE.CANCEL;
 
         return this.bookingRepository.save(booking);
     }

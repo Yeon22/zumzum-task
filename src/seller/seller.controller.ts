@@ -74,6 +74,6 @@ export class SellerController {
             throw new BadRequestException('예약 정보를 찾을 수 없습니다.');
         }
 
-        return this.bookingService.approveBooking({booking});   
+        return this.bookingService.approve({booking});   
     }
 }

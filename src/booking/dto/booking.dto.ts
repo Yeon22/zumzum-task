@@ -16,3 +16,11 @@ export class ApproveBookingDto {
     @IsInstance(Booking)
     booking: Booking;
 }
+
+export class CancelBookingDto {
+    @IsInstance(Customer)
+    customer: Customer;
+
+    @IsInstance(Booking)
+    booking: Booking;
+}

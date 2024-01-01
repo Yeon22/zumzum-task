@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, Post, Param, BadRequestException, Get } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post, Param, BadRequestException, Get, Delete } from '@nestjs/common';
 import { CreateCustomerBookingDto, CreateCustomerDto } from './dto/customer.dto';
 import { Customer } from './entity/customer.entity';
 import { Booking } from 'src/booking/entity/booking.entity';
@@ -44,5 +44,20 @@ export class CustomerController {
         }
 
         return this.bookingService.findsByCustomerId(id);
+    }
+
+    @Delete(':id/booking/')
+    async cancelBooking(@Param('id') id: number, @Body('token') token: string): Promise<Booking> {
+        const customer = await this.customerService.findById(id);
+        if (!customer) {
+            throw new BadRequestException('사용자 정보를 찾을 수 없습니다.');
+        }
+
+        const booking = await this.bookingService.findByToken(token);
+        if (!booking) {
+            throw new BadRequestException('예약 정보를 찾을 수 없습니다.');
+        }
+
+        return this.bookingService.cancel({customer, booking});
     }
 }
