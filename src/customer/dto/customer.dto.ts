@@ -1,4 +1,5 @@
 import {IsEnum, IsMobilePhone, IsString} from '@nestjs/class-validator';
+import { IsDate, MinDate } from 'class-validator';
 import { BOOKING_STATE } from 'src/booking/entity/booking.entity';
 
 export class CreateCustomerDto {
@@ -12,4 +13,8 @@ export class CreateCustomerDto {
 export class CreateCustomerBookingDto {
     @IsEnum(BOOKING_STATE)
     state: BOOKING_STATE;
+
+    @IsDate()
+    @MinDate(new Date())
+    tourStartAt: Date;
 }

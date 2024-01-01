@@ -20,6 +20,7 @@ export class BookingService {
         booking.tour = tour;
         booking.seller = tour.seller;
         booking.state = createBookingDto.state;
+        booking.tourStartAt = createBookingDto.tourStartAt;
 
         return this.bookingRepository.save(booking);
     }

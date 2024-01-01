@@ -33,6 +33,9 @@ export class Booking {
     @Column({ default: BOOKING_STATE.WAIT })
     state: BOOKING_STATE;
 
+    @Column({ name: 'tour_start_at', nullable: true })
+    tourStartAt: Date;
+
     @Column({ name: 'approved_at', nullable: true })
     approvedAt: Date
 
