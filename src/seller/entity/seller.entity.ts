@@ -1,3 +1,4 @@
+import { Booking } from "src/booking/entity/booking.entity";
 import { Tour } from "src/tour/entity/tour.entity";
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
@@ -8,6 +9,9 @@ export class Seller {
 
     @OneToMany(() => Tour, (tour) => tour.seller)
     tours: Tour[];
+
+    @OneToMany(() => Booking, (booking) => booking.seller)
+    bookings: Booking[];
 
     @Column({ length: 50 })
     name: string;

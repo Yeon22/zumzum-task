@@ -1,5 +1,6 @@
+import { Booking } from "src/booking/entity/booking.entity";
 import { Seller } from "src/seller/entity/seller.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 export enum STATE {
     NON_USE = 0,
@@ -24,6 +25,9 @@ export class Tour {
     @ManyToOne(() => Seller, (seller) => seller.tours)
     @JoinColumn({ name: 'seller_id' })
     seller: Seller;
+
+    @OneToMany(() => Booking, (booking) => booking.tour)
+    bookings: Booking[];
 
     @Column({ length: 100 })
     title: string;

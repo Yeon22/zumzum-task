@@ -18,4 +18,8 @@ export class CustomerService {
 
         return this.customerRepository.save(customer);
     }
+
+    findById(id: number): Promise<Customer> {
+        return this.customerRepository.findOne({ where: {id} });
+    }
 }
