@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { BOOKING_STATE, Booking } from './entity/booking.entity';
 import { ApproveBookingDto, CancelBookingDto, CreateBookingDto } from './dto/booking.dto';
 import { randomUUID } from 'crypto';
@@ -21,7 +21,12 @@ export class BookingService {
         booking.seller = tour.seller;
         booking.state = createBookingDto.state;
         booking.tourStartAt = createBookingDto.tourStartAt;
+        booking.token = createBookingDto.token;
         booking.tourEndAt = new Date(createBookingDto.tourStartAt.getTime() + tour.tour_period * 24 * 60 * 60 * 1000);
+        if (createBookingDto.token) {
+            booking.approvedAt = new Date();
+            booking.state = BOOKING_STATE.APPROVE;
+        }
 
         return this.bookingRepository.save(booking);
     }
@@ -64,6 +69,25 @@ export class BookingService {
             relations: {
                 tour: true
             }
+        });
+    }
+
+    findTodayApprovedBookingCountByTourId(tourId: number): Promise<number> {
+        const today = () => {
+            const date = new Date();
+            return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+        }
+        const start = new Date(`${today()} 00:00:00`);
+        const end = new Date(`${today()} 23:59:59`);
+
+        return this.bookingRepository.count({
+            where: {
+                state: BOOKING_STATE.APPROVE,
+                approvedAt: Between(start, end),
+                tour: {
+                    id: tourId
+                },
+            },
         });
     }
 

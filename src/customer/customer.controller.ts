@@ -1,4 +1,5 @@
 import { Body, Controller, HttpCode, Post, Param, BadRequestException, Get, Delete } from '@nestjs/common';
+import { randomUUID } from 'crypto';
 import { CreateCustomerBookingDto, CreateCustomerDto } from './dto/customer.dto';
 import { Customer } from './entity/customer.entity';
 import { Booking } from 'src/booking/entity/booking.entity';
@@ -33,7 +34,12 @@ export class CustomerController {
             throw new BadRequestException('투어 상품 정보를 찾을 수 없습니다.');
         }
 
-        return this.bookingService.create({...createCustomerBookingDto, customer, tour});
+        const count = await this.bookingService.findTodayApprovedBookingCountByTourId(tour.id);
+        if (count >= 5) {
+            return this.bookingService.create({...createCustomerBookingDto, customer, tour});
+        }
+        
+        return this.bookingService.create({...createCustomerBookingDto, token: randomUUID(), customer, tour});
     }
 
     @Get(':id/booking')

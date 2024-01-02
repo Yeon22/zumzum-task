@@ -1,4 +1,6 @@
-import { IsInstance } from "@nestjs/class-validator";
+import { IsInstance, IsUUID } from "@nestjs/class-validator";
+import { UUID } from "crypto";
+import { IsOptional } from "class-validator";
 import { Customer } from "src/customer/entity/customer.entity";
 import { Tour } from "src/tour/entity/tour.entity";
 import { Booking } from "../entity/booking.entity";
@@ -10,6 +12,10 @@ export class CreateBookingDto extends CreateCustomerBookingDto {
 
     @IsInstance(Tour)
     tour: Tour;
+
+    @IsUUID()
+    @IsOptional()
+    token?: UUID;
 }
 
 export class ApproveBookingDto {
