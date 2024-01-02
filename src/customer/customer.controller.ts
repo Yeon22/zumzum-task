@@ -58,6 +58,15 @@ export class CustomerController {
             throw new BadRequestException('예약 정보를 찾을 수 없습니다.');
         }
 
+        if (booking.customer.id !== customer.id) {
+            throw new BadRequestException('예약정보와 고객정보가 일치하지 않습니다.');
+        }
+
+        const afterThreeDays = new Date().getTime() + (3 * 24 * 60 * 60 * 1000);
+        if (new Date(booking.tourStartAt).getTime() < afterThreeDays) {
+            throw new BadRequestException('여행 3일 전까지만 취소가 가능합니다.');
+        }
+
         return this.bookingService.cancel({customer, booking});
     }
 }

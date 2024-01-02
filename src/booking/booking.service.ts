@@ -77,11 +77,7 @@ export class BookingService {
     }
 
     cancel(cancelBookingDto: CancelBookingDto): Promise<Booking> {
-        const {booking, customer} = cancelBookingDto;
-
-        if (booking.customer.id !== customer.id) {
-            throw new Error('예약정보와 고객정보가 일치하지 않습니다.');
-        }
+        const {booking} = cancelBookingDto;
 
         booking.state = BOOKING_STATE.CANCEL;
 
