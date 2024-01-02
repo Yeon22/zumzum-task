@@ -2,6 +2,10 @@
 
 줌줌투어 백엔드 과제
 
+## ERD
+
+![ERD](./static/ERD.png)
+
 ## Set up
 
 1. 처음 세팅시 아래처럼 주석처리 후 docker-compose up 실행
