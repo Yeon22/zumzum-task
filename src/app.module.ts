@@ -24,7 +24,8 @@ import * as redisStore from 'cache-manager-ioredis';
     CacheModule.register({
       store: redisStore,
       host: process.env.REDIS_HOST,
-      port: process.env.REDIS_PORT
+      port: process.env.REDIS_PORT,
+      isGlobal: true,
     }),
     CustomerModule,
     SellerModule,

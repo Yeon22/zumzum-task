@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, Post, Param, BadRequestException, Get, Delete } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post, Param, BadRequestException, Get, Delete, UseInterceptors } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { CreateCustomerBookingDto, CreateCustomerDto } from './dto/customer.dto';
 import { Customer } from './entity/customer.entity';
@@ -6,6 +6,7 @@ import { Booking } from 'src/booking/entity/booking.entity';
 import { CustomerService } from './customer.service';
 import { TourService } from 'src/tour/tour.service';
 import { BookingService } from 'src/booking/booking.service';
+import { CacheInterceptor, CacheKey } from '@nestjs/cache-manager';
 
 @Controller('customer')
 export class CustomerController {
@@ -80,5 +81,17 @@ export class CustomerController {
         }
 
         return this.bookingService.cancel({customer, booking});
+    }
+
+    @Get(':id/booking/:month/available')
+    @UseInterceptors(CacheInterceptor)
+    @CacheKey('booking-month-available')
+    async findAvailableBookingDates(@Param('id') id: number, @Param('month') month: number): Promise<number[]> {
+        const customer = await this.customerService.findById(id);
+        if (!customer) {
+            throw new BadRequestException('사용자 정보를 찾을 수 없습니다.');
+        }
+
+        return this.bookingService.findsAvailableDates(id, month);
     }
 }

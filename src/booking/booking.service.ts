@@ -91,6 +91,30 @@ export class BookingService {
         });
     }
 
+    async findsAvailableDates(customerId: number, month: number): Promise<number[]> {
+        const fullYear = new Date().getFullYear();
+        const startDate = new Date(fullYear, month - 1, 1);
+        const endDate = new Date(fullYear, month, 0);
+        const dates = new Array(endDate.getDate()).fill(9).map((v, i) => i + 1);
+        
+        const bookings = await this.bookingRepository.find({
+            where: {
+                tourStartAt: Between(startDate, endDate),
+                customer: {
+                    id: customerId
+                }
+            }
+        });
+
+        const bookingTourDates = new Set(bookings.map(b => {
+            const tourStartDate = new Date(b.tourStartAt).getDate();
+            const tourEndDate = new Date(b.tourEndAt).getDate();
+            return new Array(tourEndDate + 1 - tourStartDate).fill(0).map((_, i) => tourStartDate + i);
+        }).flat());
+
+        return dates.filter(d => !bookingTourDates.has(d));
+    }
+
     approve(approveBookingDto: ApproveBookingDto): Promise<Booking> {
         const {booking} = approveBookingDto;
         booking.state = BOOKING_STATE.APPROVE;

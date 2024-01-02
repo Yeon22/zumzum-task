@@ -1,14 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IsNull, Repository } from 'typeorm';
-import { TOUR_STATE, Tour } from './entity/tour.entity';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager'
+import { Repository } from 'typeorm';
+import { Tour } from './entity/tour.entity';
 import { CreateTourDto, UpdateTourHolidayDto } from './dto/tour.dto';
 
 @Injectable()
 export class TourService {
     constructor(
         @InjectRepository(Tour)
-        private readonly tourRepository: Repository<Tour>
+        private readonly tourRepository: Repository<Tour>,
+        @Inject(CACHE_MANAGER)
+        private readonly cacheService: Cache,
     ) {}
 
     async create(createTourDto: CreateTourDto): Promise<Tour> {
@@ -26,20 +30,14 @@ export class TourService {
         return this.tourRepository.findOne({ where: {id}, relations: {seller: true} });
     }
 
-    /**
-     * @todo 예약이 없는 기간의 투어 상품 조회
-     * @param month 
-     */
-    // findsAvailable(month: number): Promise<Tour[]> {
-        
-    // }
-
     async updateHoliday(updateTourHolidayDto: UpdateTourHolidayDto): Promise<Tour> {
         const {tour} = updateTourHolidayDto;
 
         tour.holidayDate = updateTourHolidayDto.holidayDate;
         tour.holidayDay = updateTourHolidayDto.holidayDay;
         tour.holidayIsRepeat = updateTourHolidayDto.holidayIsRepeat;
+
+        await this.cacheService.del('booking-month-available');
         
         return this.tourRepository.save(tour);
     }
