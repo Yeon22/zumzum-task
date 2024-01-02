@@ -42,6 +42,12 @@ export class CustomerController {
         return this.bookingService.create({...createCustomerBookingDto, token: randomUUID(), customer, tour});
     }
 
+    /**
+     * 사용자가 예약한 전체 예약 정보를 조회가능한 API
+     * 경험상 사용자가 자신이 어떤 상품을 예약했는지 전체 조회할 수 있는 기능이 있어야 하지 않을까 싶어서 추가했습니다.
+     * @param id 
+     * @returns Booking[]
+     */
     @Get(':id/booking')
     async findBookings(@Param('id') id: number): Promise<Booking[]> {
         const customer = await this.customerService.findById(id);
@@ -52,7 +58,7 @@ export class CustomerController {
         return this.bookingService.findsByCustomerId(id);
     }
 
-    @Delete(':id/booking/')
+    @Delete(':id/booking')
     async cancelBooking(@Param('id') id: number, @Body('token') token: string): Promise<Booking> {
         const customer = await this.customerService.findById(id);
         if (!customer) {

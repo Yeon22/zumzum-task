@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Tour } from './entity/tour.entity';
+import { IsNull, Repository } from 'typeorm';
+import { TOUR_STATE, Tour } from './entity/tour.entity';
 import { CreateTourDto, UpdateTourHolidayDto } from './dto/tour.dto';
 
 @Injectable()
@@ -25,6 +25,14 @@ export class TourService {
     findById(id: number): Promise<Tour> {
         return this.tourRepository.findOne({ where: {id}, relations: {seller: true} });
     }
+
+    /**
+     * @todo 예약이 없는 기간의 투어 상품 조회
+     * @param month 
+     */
+    // findsAvailable(month: number): Promise<Tour[]> {
+        
+    // }
 
     async updateHoliday(updateTourHolidayDto: UpdateTourHolidayDto): Promise<Tour> {
         const {tour} = updateTourHolidayDto;
